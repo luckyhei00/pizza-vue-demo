@@ -1,0 +1,57 @@
+一个vue项目建设过程中的主要流程及思路
+一.组件规划及路由配置
+1.当准备开始项目时，仔细研究业务需求及原图，确定所需要用的的组件
+   在src文件夹下新建components文件夹，在里面新建一级组件，比如Home.vue,如果某个组件下会有二级路由，给这个文件单独开一个目录，把他和他的子组件都放进去，比如About.vue
+2.确定已经组织好所有的组件后，给他们一些内容，方便调试路由
+3.在根组件App.vue中引入导航组件Header,并完成注册
+    import Header from "./components/Header"
+    export default {
+        components:{
+            "app-header":Header
+        }
+    }
+4.在根组件中让它渲染出来，并确认页面渲染没有问题
+    <div class="container">
+      <app-header></app-header>
+    </div>
+5.在main.js中引用路由模块
+    import VueRouter from 'vue-router'
+6.使用路由
+    Vue.use(VueRouter)
+7.引入组件模块
+    如 import Home from './components/Home'
+       import Menu from './components/Menu'
+8.配置路由
+    如 const routes = [
+                {path:"/",name:"homeLink",component:Home},
+                {path:"/menu",name:"menuLink",component:Menu}
+            ]
+9.路由实例化
+    const router = new VueRouter({
+        routes,
+        mode:'history'    (这里记得要加，不然会有#)
+    })
+10.一定记得在根组件实例里添加路由
+    new Vue({
+        el: '#app',
+        router,
+        components: { App },
+        template: '<App/>'
+    })
+11.完成导航页路由设置如下，这里路由配置的方式有多种，可以不绑定直接跳转目录，可以绑定到属性，全看个人心情
+     <ul class="navbar-nav">
+        <li>
+            <router-link :to="{name:'homeLink'}" class="nav-link">主页</router-link>
+        </li>
+    </ul>
+12.将路由跳转内容渲染到需要出现的位置
+    比如根组件的这里<template>
+                        <div id="app">
+                            <div class="container">
+                            <app-header></app-header>
+                            </div>
+                            <div class="container">
+                            <router-view></router-view>
+                            </div>
+                        </div>
+                    </template>
